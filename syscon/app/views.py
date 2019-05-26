@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Function, Collaborator
+from .models import Function, Collaborator, Resident
 
 # Create your views here.
 
@@ -18,4 +18,17 @@ def collaborator(request):
 
 
 def resident(request):
-    return render(request, 'app/resident.html', {})
+    residents = Resident.objects.all()
+    return render(request, 'app/resident.html', {'residents':residents})
+
+def about(request):
+    return render(request, 'app/about.html', {})
+
+def login(request):
+    return render(request, 'app/login.html', {})
+
+def register(request):
+    return render(request, 'app/register.html', {})
+
+def schedule(request):
+    return render(request, 'app/schedule.html', {})
