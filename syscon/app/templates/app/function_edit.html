@@ -6,7 +6,10 @@
     </div>
     <div>
         <form method="POST" class="post-form">{% csrf_token %}
-            {{ form.as_p }}
+            <div class="form-group">
+                <label>Nome</label>
+                {{ form.name }} 
+            </div>
             <br>
             <button type="submit" class="save btn btn-default">Salvar</button>
         </form>

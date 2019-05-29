@@ -6,7 +6,21 @@
     </div>
     <div>
         <form method="POST" class="post-form">{% csrf_token %}
-            {{ form.as_p }}
+            
+            <div class="form-group">
+                <label>Nome</label>
+                {{ form.name }} 
+            </div>
+            <div class="form-group">
+                <label>Data de Nascimento</label>
+                {{ form.birth_day }}
+            </div>
+            <div class="form-group">
+                <label>Função</label>
+                {{ form.function }}
+            </div>
+            
+            
             <br>
             <button type="submit" class="save btn btn-default">Salvar</button>
         </form>
