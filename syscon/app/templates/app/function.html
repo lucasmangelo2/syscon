@@ -1,0 +1,32 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <div>
+        <h1>
+            Funções
+            <a href="{% url 'function_new' %}"><i class="fas fa-plus"></i></a>
+        </h1>
+    </div>
+    <div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Data de Criação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for function in functions %}
+                    <tr>
+                        <td>{{ function.name }}</td>
+                        <td>{{ function.created_date }}</td>
+                        <td>
+                            <a href="{% url 'function_edit' pk=function.pk  %}" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'function_delete' pk=function.pk  %}" title="Deletar"><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
