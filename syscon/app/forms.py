@@ -6,15 +6,25 @@ class FunctionForm(forms.ModelForm):
         model = Function
         fields = ('name',)
 
+    name = forms.CharField(
+        max_length=200, 
+        required=True, 
+        widget=forms.TextInput(attrs={'class':'form-control'})
+    )
 
-class CollaboratorForm(forms.Form):
+
+class CollaboratorForm(forms.ModelForm):
+    class Meta:
+        model = Collaborator
+        fields = ('name','birth_day', 'function', )
+
     name = forms.CharField(
         max_length=200, 
         required=True, 
         widget=forms.TextInput(attrs={'class':'form-control'})
     )
     birth_day = forms.DateField(
-        widget=forms.widgets.DateInput(format="%dd/%mm/%YYYY", attrs={'class':'form-control', 'type':'date'}),
+        widget=forms.widgets.DateInput(format="%d/%m/%Y", attrs={'class':'form-control', 'type':'date'}),
         required=True)
 
     function = forms.ModelChoiceField(

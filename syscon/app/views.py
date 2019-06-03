@@ -58,7 +58,7 @@ def collaborator_new(request):
      return render(request, 'app/collaborator_edit.html', {'form': form})
 
 def collaborator_edit(request, pk):
-     collaborator = get_object_or_404(collaborator, pk=pk)
+     collaborator = get_object_or_404(Collaborator, pk=pk)
      if request.method == "POST":
          form = CollaboratorForm(request.POST, instance=collaborator)
          if form.is_valid():
@@ -76,14 +76,6 @@ def collaborator_delete(request, pk):
     return redirect('collaborator')
 
 #
-
-def resident(request):
-    residents = Resident.objects.all()
-    return render(request, 'app/resident.html', {'residents':residents})
-
-def resident_detail(request, pk):
-    resident = get_object_or_404(Resident, pk=pk)
-    return render(request, 'app/resident_detail.html', {'resident': resident})
 
 def schedule(request):
     schedules = Schedule.objects.all()
