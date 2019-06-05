@@ -13,10 +13,11 @@
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     </head>
-    <body>
+    <body background="{% static 'images/condominio_wallpaper.jpg' %}">
         <div class="content container">
             {% block content %}
             {% endblock %}
         </div>
+        <!-- <img src="{% static 'images/condominio_wallpaper.jpg' %}" alt=""> -->
     </body>
 </html>
