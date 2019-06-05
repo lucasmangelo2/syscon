@@ -2,6 +2,34 @@
 
 {% block content %}
     <div>
-        <h1>Tarefas</h1>
+        <h1>
+            Tarefas
+            <a href="{% url 'schedule_new' %}"><i class="fas fa-plus"></i></a>
+        </h1>
+    </div>
+    <div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Colaborador</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for schedule in schedules %}
+                    <tr>
+                        <td>{{ schedule.name }}</td>
+                        <td>{{ schedule.date }}</td>
+                        <td>{{ schedule.collaborator }}</td>
+                        <td>
+                            <a href="{% url 'schedule_edit' pk=schedule.pk  %}" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'schedule_delete' pk=schedule.pk  %}" title="Deletar"><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}

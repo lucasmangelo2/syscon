@@ -4,6 +4,7 @@
     <div>
         <h1>Nova Função</h1>
     </div>
+    <br>
     <div>
         <form method="POST" class="post-form">{% csrf_token %}
             <div class="form-group">
@@ -11,7 +12,7 @@
                 {{ form.name }} 
             </div>
             <br>
-            <button type="submit" class="save btn btn-default">Salvar</button>
+            <button type="submit" class="save btn btn-outline-success">Salvar</button>
         </form>
     </div>
 {% endblock %}

@@ -15,7 +15,7 @@ class Function(models.Model):
 class Collaborator(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.PROTECT)
     name = models.CharField(max_length=200)
-    birth_day = models.DateTimeField()
+    birth_day = models.DateField()
     function = models.ForeignKey('Function', on_delete=models.PROTECT)
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -49,5 +49,5 @@ class Schedule(models.Model):
     author= models.ForeignKey('auth.User', on_delete=models.PROTECT)
     created_date = models.DateTimeField(default=timezone.now)
     name = models.CharField(max_length=200)
-    date = models.DateField()
+    date = models.DateTimeField()
     collaborator = models.ForeignKey('Collaborator', on_delete=models.CASCADE)

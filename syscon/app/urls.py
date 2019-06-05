@@ -14,9 +14,9 @@ urlpatterns = [
     path('collaborator/<int:pk>/delete/', views.collaborator_delete, name='collaborator_delete'),
 
     path('schedule', views.schedule, name='schedule'),
-    path('schedule/<int:pk>/', views.schedule_detail, name='schedule_detail'),
+    path('schedule/new', views.schedule_new, name='schedule_new'),
+    path('schedule/<int:pk>/edit/', views.schedule_edit, name='schedule_edit'),
+    path('schedule/<int:pk>/delete/', views.schedule_delete, name='schedule_delete'),
 
     path('about', views.about, name='about'),
-    path('login', views.login, name='login'),
-    path('register', views.register, name='register'),
 ]
