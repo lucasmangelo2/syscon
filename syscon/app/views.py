@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Function, Collaborator, Resident, Schedule
 from .forms import FunctionForm, CollaboratorForm, ScheduleForm
 
@@ -9,6 +10,7 @@ def dashboard(request):
 
 # Function
 
+@login_required
 def function(request):
     functions = Function.objects.all()
     return render(request, 'app/function.html', {'functions':functions})

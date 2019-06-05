@@ -43,8 +43,8 @@ class ScheduleForm(forms.ModelForm):
         required=True, 
         widget=forms.TextInput(attrs={'class':'form-control'})
     )
-    date = forms.DateField(
-        widget=forms.widgets.DateInput(format="%d/%m/%Y", attrs={'class':'form-control', 'type':'datetime'}),
+    date = forms.DateTimeField(
+        widget=forms.widgets.DateInput( attrs={'class':'form-control', 'type':'date'}),
         required=True)
 
     collaborator = forms.ModelChoiceField(
