@@ -1,7 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Function, Collaborator, Resident, Schedule
 from .forms import FunctionForm, CollaboratorForm, ScheduleForm
+import json
+from django.core import serializers
+
 
 # Create your views here.
 
@@ -43,6 +47,11 @@ def function_delete(request, pk):
     function.delete()
     return redirect('function')
 
+def function_export(request):
+    functions = Function.objects.all()
+    data ={"data":  get_json_list(functions)}
+    return JsonResponse(data)
+
 # Collaborator
 
 def collaborator(request):
@@ -78,6 +87,16 @@ def collaborator_delete(request, pk):
     collaborator = get_object_or_404(Collaborator, pk=pk)
     collaborator.delete()
     return redirect('collaborator')
+
+def collaborator_export(request):
+    collaborators = Collaborator.objects.all()
+
+    for item in collaborators:
+        item.author = None
+        item.function = None
+
+    data ={"data":  get_json_list(collaborators)}
+    return JsonResponse(data)
 
 # Schedule
 
@@ -115,7 +134,34 @@ def schedule_delete(request, pk):
     schedule.delete()
     return redirect('schedule')
 
+def schedule_export(request):
+    schedules = Schedule.objects.all()
+
+    for item in schedules:
+        item.author = None
+        item.collaborator = None
+
+    data ={"data":  get_json_list(schedules)}
+    return JsonResponse(data)
+
+
 # About
 
 def about(request):
     return render(request, 'app/about.html', {})
+
+
+def get_json_list(query_set):
+    list_objects = []
+    for obj in query_set:
+        dict_obj = {}
+        for field in obj._meta.get_fields():
+            try:
+                if field.many_to_many:
+                    dict_obj[field.name] = get_json_list(getattr(obj, field.name).all())
+                    continue
+                dict_obj[field.name] = getattr(obj, field.name)
+            except AttributeError:
+                continue
+        list_objects.append(dict_obj)
+    return list_objects
