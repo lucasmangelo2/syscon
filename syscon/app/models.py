@@ -51,3 +51,8 @@ class Schedule(models.Model):
     name = models.CharField(max_length=200)
     date = models.DateTimeField()
     collaborator = models.ForeignKey('Collaborator', on_delete=models.CASCADE)
+    STATUS_CHOISES = (
+        ('A', 'Adicionado'),
+        ('C', 'Concluído'),
+    )
+    status = models.CharField(max_length=2, choices=STATUS_CHOISES, default="A")

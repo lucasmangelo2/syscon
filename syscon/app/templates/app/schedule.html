@@ -1,11 +1,15 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-    <div>
+    <div class="header-title">
         <h1>
             Tarefas
             <a href="{% url 'schedule_new' %}"><i class="fas fa-plus"></i></a>
         </h1>
+
+        <span class="export">
+            <a href="{% url 'schedule_export' %}"><i class="fas fa-download"></i></a>
+        </span>
     </div>
     <div>
         <table class="table">
@@ -14,6 +18,7 @@
                     <th scope="col">Nome</th>
                     <th scope="col">Data</th>
                     <th scope="col">Colaborador</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Ações</th>
                 </tr>
             </thead>
@@ -24,6 +29,17 @@
                         <td>{{ schedule.date }}</td>
                         <td>{{ schedule.collaborator }}</td>
                         <td>
+                            {% if schedule.status == 'A' %}
+                                Não realizado
+                            {% elif schedule.status == 'C' %}
+                                Concluído
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if schedule.status == 'A' %}
+                                <a href="{% url 'schedule_conclude' pk=schedule.pk  %}" title="Concluir tarefa"><i class="fas fa-toggle-on"></i></a>
+                            {% endif %}
+                            
                             <a href="{% url 'schedule_edit' pk=schedule.pk  %}" title="Editar"><i class="fas fa-edit"></i></a>
                             <a href="{% url 'schedule_delete' pk=schedule.pk  %}" title="Deletar"><i class="fas fa-trash-alt"></i></a>
                         </td>

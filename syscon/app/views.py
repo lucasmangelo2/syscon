@@ -1,11 +1,14 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, JsonResponse
+import json
+import os
+from django.http import HttpResponse, JsonResponse, Http404
+from django.core.serializers.json import DjangoJSONEncoder
+from django.conf import settings
+from django.core import serializers
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Function, Collaborator, Resident, Schedule
 from .forms import FunctionForm, CollaboratorForm, ScheduleForm
-import json
-from django.core import serializers
-
+from zipfile import ZipFile
 
 # Create your views here.
 
@@ -49,8 +52,10 @@ def function_delete(request, pk):
 
 def function_export(request):
     functions = Function.objects.all()
-    data ={"data":  get_json_list(functions)}
-    return JsonResponse(data)
+    data = get_json_list(functions)
+    
+    response = export_zip_file(request, 'function_export', 'function.json',data)
+    return response
 
 # Collaborator
 
@@ -91,12 +96,10 @@ def collaborator_delete(request, pk):
 def collaborator_export(request):
     collaborators = Collaborator.objects.all()
 
-    for item in collaborators:
-        item.author = None
-        item.function = None
-
-    data ={"data":  get_json_list(collaborators)}
-    return JsonResponse(data)
+    data = get_json_list(collaborators)
+    
+    response = export_zip_file(request, 'collaborator_export', 'collaborator.json',data)
+    return response
 
 # Schedule
 
@@ -137,13 +140,17 @@ def schedule_delete(request, pk):
 def schedule_export(request):
     schedules = Schedule.objects.all()
 
-    for item in schedules:
-        item.author = None
-        item.collaborator = None
+    data = get_json_list(schedules)
+    
+    response = export_zip_file(request, 'schedule_export', 'schedules.json',data)
+    return response
 
-    data ={"data":  get_json_list(schedules)}
-    return JsonResponse(data)
+def schedule_conclude(request, pk):
+    schedule = get_object_or_404(Schedule, pk=pk) 
+    schedule.status = 'C'
+    schedule.save()
 
+    return redirect('schedule')
 
 # About
 
@@ -159,9 +166,41 @@ def get_json_list(query_set):
             try:
                 if field.many_to_many:
                     dict_obj[field.name] = get_json_list(getattr(obj, field.name).all())
-                    continue
-                dict_obj[field.name] = getattr(obj, field.name)
+                else:
+                    value = getattr(obj, field.name)
+
+                    if field.is_relation:
+                        value = value.__str__()
+                
+                dict_obj[field.name] = value
+
             except AttributeError:
                 continue
         list_objects.append(dict_obj)
-    return list_objects
+
+    return json.dumps(list_objects,sort_keys=True,indent=1, cls=DjangoJSONEncoder)
+
+def export_zip_file(request, zipname, filename, content):
+    try:
+        from BytesIO import BytesIO
+    except ImportError:
+        from io import BytesIO
+
+    in_memory = BytesIO()
+    zip = ZipFile(in_memory, "a")
+        
+    zip.writestr(filename, content)
+    
+    # fix for Linux zip files read in Windows
+    for file in zip.filelist:
+        file.create_system = 0    
+        
+    zip.close()
+
+    response = HttpResponse(content_type="application/zip")
+    response["Content-Disposition"] = "attachment; filename={0}.zip".format(zipname)
+    
+    in_memory.seek(0)    
+    response.write(in_memory.read())
+
+    return response

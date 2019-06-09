@@ -1,11 +1,15 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-    <div>
+    <div class="header-title">
         <h1>
             Colaborador
             <a href="{% url 'collaborator_new' %}"><i class="fas fa-plus"></i></a>
         </h1>
+
+        <span class="export">
+            <a href="{% url 'collaborator_export' %}"><i class="fas fa-download"></i></a>
+        </span>
     </div>
     <div>
         <table class="table">

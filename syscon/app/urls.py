@@ -20,6 +20,7 @@ urlpatterns = [
     path('schedule/new', views.schedule_new, name='schedule_new'),
     path('schedule/<int:pk>/edit/', views.schedule_edit, name='schedule_edit'),
     path('schedule/<int:pk>/delete/', views.schedule_delete, name='schedule_delete'),
+    path('schedule/<int:pk>/conclude/', views.schedule_conclude, name='schedule_conclude'),
     path('schedule/export', views.schedule_export, name='schedule_export'),
 
     path('about', views.about, name='about'),
